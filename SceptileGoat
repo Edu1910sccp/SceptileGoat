@@ -1,0 +1,72 @@
+package com.example.myapplication
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.example.sceptilegoat.ui.theme.SceptileGoatTheme
+
+data class Pessoa(val nome: String, val descricao: String, val fotoResId: Int)
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            SceptileGoatTheme()  { 
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    ListaDePessoas(modifier = Modifier.padding(innerPadding))
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun PessoaCard(pessoa: Pessoa) {
+    Row(modifier = Modifier.padding(8.dp)) {
+        Image(
+            painter = painterResource(pessoa.fotoResId),
+            contentDescription = "Foto de perfil",
+            modifier = Modifier
+                .size(60.dp)
+                .clip(CircleShape)
+        )
+        Spacer(modifier = Modifier.width(12.dp))
+        Column {
+            Text(text = pessoa.nome)
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(text = pessoa.descricao)
+        }
+    }
+}
+
+@Composable
+fun ListaDePessoas(modifier: Modifier = Modifier) {
+    val pessoas = listOf(
+        Pessoa("Maria Silva", "Desenvolvedora Android apaixonada por tecnologia.", R.drawable.profile),
+        Pessoa("João Souza", "Designer criativo e curioso.", R.drawable.profile),
+        Pessoa("Helena Costa", "Estudante de ciência da computação.", R.drawable.profile)
+    )
+
+    Column(modifier = modifier) {
+        pessoas.forEach { pessoa ->
+            PessoaCard(pessoa)
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewListaDePessoas() {
+    SceptileGoatTheme {
+        ListaDePessoas()
